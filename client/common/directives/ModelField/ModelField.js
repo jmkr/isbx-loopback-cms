@@ -286,7 +286,7 @@ angular.module('dashboard.directives.ModelField', [
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
             <div ng-class="{\'input-status-indicator\': display.showStatusIndicator}">\
-              <input type="text" ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-pattern="display.pattern" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}">\
+              <input type="text" ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-pattern="display.pattern" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}" ng-blur="onBlur({key: key})">\
               <div class="field-status-indicator" ng-if="display.showStatusIndicator">\
                 <i class="fa" ng-class="{\'fa-check\': display.isValid && !display.isLoading, \'fa-warning\': !display.isValid && !display.isLoading, \'fa-spinner rotating\': display.isLoading}"></i>\
               </div>\
@@ -315,9 +315,11 @@ angular.module('dashboard.directives.ModelField', [
       key: '=key',
       model: '=model',
       data: '=ngModel',
-      ngError: '&'
+      ngError: '&',
+      ngBlur: '&'
     },
     link: function(scope, element, attrs) {
+
 
       var property;
 
@@ -404,11 +406,13 @@ angular.module('dashboard.directives.ModelField', [
         // TODO: generalize isRequired validation option
 
         if (property.display.type === 'text' || property.display.type === 'textarea') {
+          var hasDataChanged = false
           var length = scope.data[scope.key] ? scope.data[scope.key].length : 0;
           scope.charsLeft = property.display.maxLength - length; /*calculate outside of function so we have a starting value */
 
           // validate text length
           scope.lengthCheck = function(e) {
+            hasDataChanged = true;
             scope.charsLeft = property.display.maxLength - e.target.value.length;
             if (property.display.maxLength && e.target.value.length > property.display.maxLength) {
               scope.display.error = "Text is longer than the maximum allowed length of " + scope.display.maxLength + " characters.";
@@ -423,6 +427,13 @@ angular.module('dashboard.directives.ModelField', [
               scope.display.error = "This is a required field.";
               if (scope.ngError) scope.ngError({error: new Error(scope.display.error)});
             }
+          };
+
+          scope.onBlur = function(key) {
+            if (scope.ngBlur && hasDataChanged) {
+              scope.ngBlur(key)
+            }
+            hasDataChanged = false
           }
         }
 

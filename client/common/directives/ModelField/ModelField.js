@@ -295,6 +295,9 @@ angular.module('dashboard.directives.ModelField', [
               <span ng-if="display.description"> {{ display.description | translate }} </span> \
               <span ng-if="display.maxLength"> &nbsp({{ charsLeft }} characters left) </span>\
             </div>\
+            <div class="model-field-edit-reason" ng-if="true">\
+              <span ng-if="display.editReason"> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
     }
     return template;

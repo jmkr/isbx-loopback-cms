@@ -134,7 +134,8 @@ angular.module('dashboard.directives.ModelField', [
               ng-format="display.options.format" \
               ng-time-zone="display.options.timeZone" \
               ng-view-mode="display.options.viewMode" \
-              ng-required="{{ model.properties[key].required }}" ng-disabled="{{ display.readonly }}" \
+              ng-required="{{ model.properties[key].required }}" ng-disabled="{{ display.readonly }}"\
+              ng-blur="onChange({key: key})" \
               data-date-time-picker \
                /> \
               <span class="input-group-btn"> \
@@ -142,6 +143,9 @@ angular.module('dashboard.directives.ModelField', [
               </span>\
             </p> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'multi-select':
@@ -453,7 +457,7 @@ angular.module('dashboard.directives.ModelField', [
 
         }
 
-        if (property.display.type === 'radio' || property.display.type === 'select') {
+        if (property.display.type === 'radio' || property.display.type === 'select' || property.display.type === 'datetime') {
           scope.onChange = function(key) {
             var hasDataChanged = true
             if (scope.ngBlur && hasDataChanged) {

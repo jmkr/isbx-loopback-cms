@@ -267,8 +267,11 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-number key="key" property="property" options="display.options" ng-required="model.properties[key].required" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" ng-error="onFieldError(error)" class="field" />\
+            <model-field-number key="key" property="property" options="display.options" ng-required="model.properties[key].required" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" ng-error="onFieldError(error)" class="field" ng-blur="ngBlur({key: key})"/>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'phoneNumber':
@@ -295,8 +298,8 @@ angular.module('dashboard.directives.ModelField', [
               <span ng-if="display.description"> {{ display.description | translate }} </span> \
               <span ng-if="display.maxLength"> &nbsp({{ charsLeft }} characters left) </span>\
             </div>\
-            <div class="model-field-edit-reason" ng-if="true">\
-              <span ng-if="display.editReason"> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
             </div>\
           </div>';
     }
@@ -383,7 +386,7 @@ angular.module('dashboard.directives.ModelField', [
           scope.display.pattern = scope.display.pattern.slice(1, scope.display.pattern.length-2);
         }
 
-        initFieldError()
+        initFieldError();
 
         $compile(element.contents())(scope);
       }
@@ -409,7 +412,7 @@ angular.module('dashboard.directives.ModelField', [
         // TODO: generalize isRequired validation option
 
         if (property.display.type === 'text' || property.display.type === 'textarea') {
-          var hasDataChanged = false
+          var hasDataChanged = false;
           var length = scope.data[scope.key] ? scope.data[scope.key].length : 0;
           scope.charsLeft = property.display.maxLength - length; /*calculate outside of function so we have a starting value */
 
@@ -438,6 +441,7 @@ angular.module('dashboard.directives.ModelField', [
             }
             hasDataChanged = false
           }
+
         }
 
         if (property.display.type == 'file' && scope.data[scope.key]) {

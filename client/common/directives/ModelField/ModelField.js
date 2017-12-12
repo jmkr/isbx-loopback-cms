@@ -149,11 +149,15 @@ angular.module('dashboard.directives.ModelField', [
           </div>';
         break;
       case 'multi-select':
+        console.log(scope.data[scope.key])
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10 multi-select">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-multi-select key="key" property="property" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" />\
+            <model-field-multi-select key="key" property="property" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-blur="ngBlur({key: key})"/>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'select':
@@ -214,9 +218,12 @@ angular.module('dashboard.directives.ModelField', [
         template = '<div class="col-sm-2"></div> \
           <div class="col-sm-10 checkbox-container">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <input type="checkbox" ng-attr-id="{{key}}" ng-model="data[key]" ng-checked="check(data, key)" class="field" ng-disabled="{{ display.readonly }}">\
+            <input type="checkbox" ng-attr-id="{{key}}" ng-model="data[key]" ng-checked="check(data, key)" class="field" ng-disabled="{{ display.readonly }}" ng-change="onChange({key: key})">\
             <label class="checkbox-label" ng-attr-for="{{key}}">{{ display.label || key | translate }}</label>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'password':
@@ -457,7 +464,7 @@ angular.module('dashboard.directives.ModelField', [
 
         }
 
-        if (property.display.type === 'radio' || property.display.type === 'select' || property.display.type === 'datetime') {
+        if (property.display.type === 'radio' || property.display.type === 'select' || property.display.type === 'datetime' || property.display.type === 'boolean') {
           scope.onChange = function(key) {
             var hasDataChanged = true
             if (scope.ngBlur && hasDataChanged) {

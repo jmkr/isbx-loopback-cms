@@ -167,8 +167,11 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <select ng-model="data[key]" ng-options="'+ngOptions+'" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-disabled="{{ display.readonly }}"><option value=""></option></select>\
+            <select ng-model="data[key]" ng-options="'+ngOptions+'" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-disabled="{{ display.readonly }}" ng-change="onChange({key: key})"><option value=""></option></select>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'radio':
@@ -186,10 +189,13 @@ angular.module('dashboard.directives.ModelField', [
           <div class="col-sm-10 multi-select">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
             <div class="select-item checkbox-container" ng-repeat="'+ngRepeat+'" >\
-              <input type="radio" ng-attr-id="{{key+\'-\'+$index}}" ng-model="data[key]" ng-value="value || text || item.key" ng-disabled="{{ display.readonly }}" name="{{key}}">\
+              <input type="radio" ng-attr-id="{{key+\'-\'+$index}}" ng-model="data[key]" ng-value="value || text || item.key" ng-disabled="{{ display.readonly }}" name="{{key}}" ng-change="onChange({key: key})">\
               <label ng-attr-for="{{key+\'-\'+$index}}" class="radio">{{text || item.value}}</label>\
             </div>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'slider':
@@ -221,10 +227,13 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <textarea msd-elastic ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}"></textarea>\
+            <textarea msd-elastic ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}" ng-blur="onBlur({key: key})"></textarea>\
             <div class="model-field-description">\
               <span ng-if="display.description"> {{ display.description | translate }} </span> \
               <span ng-if="display.maxLength"> &nbsp({{ charsLeft }} characters left) </span>\
+            </div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
             </div>\
           </div>';
         break;
@@ -442,6 +451,16 @@ angular.module('dashboard.directives.ModelField', [
             hasDataChanged = false
           }
 
+        }
+
+        if (property.display.type === 'radio' || property.display.type === 'select') {
+          scope.onChange = function(key) {
+            var hasDataChanged = true
+            if (scope.ngBlur && hasDataChanged) {
+              scope.ngBlur(key)
+            }
+            hasDataChanged = false
+          }
         }
 
         if (property.display.type == 'file' && scope.data[scope.key]) {

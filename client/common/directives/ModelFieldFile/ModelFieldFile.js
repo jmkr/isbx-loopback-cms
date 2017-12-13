@@ -23,7 +23,7 @@ angular.module('dashboard.directives.ModelFieldFile', [
 
   return {
     restrict: 'E',
-    template: '<button class="btn btn-default select-file" ng-hide="disabled">{{ selectFileButtonText }}</button> \
+    template: '<button class="btn btn-default select-file" ng-hide="disabled" ng-click="showMe()">{{ selectFileButtonText }}</button> \
       <input type="file" ng-file-select="onFileSelect($files)" ng-hide="disabled"> \
       <button ng-if="filename" class="btn btn-danger fa fa-trash" ng-click="clear($event)" ng-hide="disabled"></button> \
       <span class="file-upload-info" ng-if="filename"><i class="fa {{getFileIcon(filename)}}"></i>&nbsp;&nbsp;{{ filename }}&nbsp;&nbsp;<span ng-if="fileUrl">(<a download href="{{fileUrl}}">download</a><span ng-if="previewUrl"> | <a target="_blank" href="{{previewUrl}}">preview</a></span>)</span></span> \
@@ -123,6 +123,7 @@ angular.module('dashboard.directives.ModelFieldFile', [
         };
 
         scope.clear = function(e) {
+          console.log(scope)
           e.preventDefault();
           if (scope.options.confirm) {
             // Requires confirmation alert
@@ -158,7 +159,11 @@ angular.module('dashboard.directives.ModelFieldFile', [
           $document.off("dragover");
           $(window).off("mouseleave");
         });
-        
+
+        scope.showMe = function() {
+          console.log(scope)
+        }
+
     }
   };
 })

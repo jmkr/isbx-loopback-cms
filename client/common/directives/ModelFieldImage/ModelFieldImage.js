@@ -39,10 +39,12 @@ angular.module('dashboard.directives.ModelFieldImage', [
       options: '=options',
       disabled: '=ngDisabled',
       data: '=ngModel',
-      modelData: '=modelData'
+      modelData: '=modelData',
+      ngBlur: '&',
     },
     link: function(scope, element, attrs, formController) {
         var selectedFile = null;
+        var hasDataChanged = false;
         // Set translation label
         scope.selectFileButtonText = 'Select File';
         scope.clearButtonText = 'Clear';
@@ -63,9 +65,9 @@ angular.module('dashboard.directives.ModelFieldImage', [
         /**
          * scope.data updates async from controller so need to watch for the first change only
          */
-        var unwatch = scope.$watch('data', function(data) {
+        scope.$watch('data', function(data) {
           if (data) {
-            unwatch(); //Remove the watch
+            // unwatch(); // Initially for removing the watcher, but with edit reason reintroduced // Remove the watch
             if (!scope.options || !scope.options.model) {
               //Not a Table reference (the field contains the image URL)
               if (typeof data === "string") {
@@ -150,13 +152,14 @@ angular.module('dashboard.directives.ModelFieldImage', [
           console.log(error);
         };
 
-        scope.clear = function() {
-          if (scope.options.confirm) {
+        scope.clear = function(isSkipConfirm) {
+          if (scope.options.confirm && !isSkipConfirm) {
             // Requires confirmation alert
-            if (!confirm('Are you sure you would like to clear this photo?')) {
+            if (!confirm('Are you sure you would like to remove this photo?')) {
               return;
             }
           }
+
           scope.data = null; //null out the data field
           if (scope.modelData.__ModelFieldImageData && scope.modelData.__ModelFieldImageData[scope.key]) {
             //make sure to remove any pending image uploads for this image field
@@ -164,10 +167,19 @@ angular.module('dashboard.directives.ModelFieldImage', [
           }
           delete scope.imageUrl; //remove the image
           delete scope.thumbnailUrl; //remove the image
-          formController.$setDirty()
+          formController.$setDirty();
+          hasDataChanged = true;
+          if (scope.ngBlur && hasDataChanged) {
+            setTimeout(function() {
+              scope.ngBlur({key: scope.key})
+            }, 1)
+          }
+          hasDataChanged = false
         };
         
         scope.onFileSelect = function($files) {
+          // clear the data on a new file select
+          if (scope.data) scope.clear(true);
           //$files: an array of files selected, each file has name, size, and type.
           if ($files.length < 1) return;
           selectedFile = $files[0];

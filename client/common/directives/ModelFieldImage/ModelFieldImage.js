@@ -40,7 +40,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
       disabled: '=ngDisabled',
       data: '=ngModel',
       modelData: '=modelData',
-      ngBlur: '&',
+      ngChange: '&',
     },
     link: function(scope, element, attrs, formController) {
         var selectedFile = null;
@@ -65,7 +65,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
         /**
          * scope.data updates async from controller so need to watch for the first change only
          */
-        scope.$watch('data', function(data) {
+        var unwatch = scope.$watch('data', function(data) {
           if (data) {
             // unwatch(); // Initially for removing the watcher, but with edit reason reintroduced // Remove the watch
             if (!scope.options || !scope.options.model) {
@@ -168,13 +168,11 @@ angular.module('dashboard.directives.ModelFieldImage', [
           delete scope.imageUrl; //remove the image
           delete scope.thumbnailUrl; //remove the image
           formController.$setDirty();
-          hasDataChanged = true;
-          if (scope.ngBlur && hasDataChanged) {
+          if (scope.ngChange) {
             setTimeout(function() {
-              scope.ngBlur({key: scope.key})
+              scope.ngChange({key: scope.key})
             }, 1)
           }
-          hasDataChanged = false
         };
         
         scope.onFileSelect = function($files) {

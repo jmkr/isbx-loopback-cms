@@ -93,27 +93,31 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label> \
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-file-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-blur="ngBlur({key: key})"/> \
+            <model-field-file-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngBlur({key: key})"/> \
           </div> \
           <br /> \
           <label class="col-sm-2 control-label place-holder-file-label"></label> \
           <div class="col-sm-10"> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
+
         break;
       case 'image':
         // depends on directive modelFieldImageEdit
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label> \
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-image-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-blur="ngBlur({key: key})"/> \
+            <model-field-image-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngBlur({key: key})"/> \
           </div>\
           <label class="col-sm-2 control-label"></label> \
           <div class="col-sm-10"> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
-          </div>\
-          <div class="model-field-edit-reason" ng-if="display.editReason">\
-            <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'video':
@@ -121,8 +125,11 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label> \
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-video-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" /> \
+            <model-field-video-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngBlur({key: key})"/> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'datetime':
@@ -218,6 +225,9 @@ angular.module('dashboard.directives.ModelField', [
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
             <input slider ng-model="data[key]" options="display.options" class="slider ng-isolate-scope ng-valid ng-hide ng-dirty"> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'boolean':
@@ -268,8 +278,11 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-canvas-edit key="key" property="property" options="display.options" ng-model="data[key]" class="field" ng-required="{{ model.properties[key].required }}" ng-disabled="display.readonly"></model-field-canvas-edit>\
+            <model-field-canvas-edit key="key" property="property" options="display.options" ng-model="data[key]" class="field" ng-required="{{ model.properties[key].required }}" ng-disabled="display.readonly" ng-change="ngBlur({key: key})"></model-field-canvas-edit>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
+            <div class="model-field-edit-reason" ng-if="display.editReason">\
+              <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
+            </div>\
           </div>';
         break;
       case 'location':

@@ -44,9 +44,12 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
       options: '=options',
       data: '=ngModel',
       modelData: '=modelData',
-      disabled: '=ngDisabled'
+      disabled: '=ngDisabled',
+      ngChange: '&',
     },
     link: function(scope, element, attrs, ngModel) {
+
+      console.log(scope)
 
       scope.isLoading = true;
       scope.signature = {};
@@ -55,6 +58,11 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
         var canvas = scope.signature._canvas;
         canvas.width = canvas.width;
         scope.data = null;
+        if (scope.ngChange) {
+          setTimeout(function() {
+            scope.ngChange({key: scope.key})
+          }, 1)
+        }
       };
 
       scope.$watch('signature._mouseButtonDown', function() {

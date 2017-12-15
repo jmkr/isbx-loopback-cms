@@ -49,8 +49,6 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
     },
     link: function(scope, element, attrs, ngModel) {
 
-      console.log(scope)
-
       scope.isLoading = true;
       scope.signature = {};
 

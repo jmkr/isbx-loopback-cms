@@ -103,7 +103,6 @@ angular.module('dashboard.directives.ModelField', [
               <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
             </div>\
           </div>';
-
         break;
       case 'image':
         // depends on directive modelFieldImageEdit
@@ -162,7 +161,6 @@ angular.module('dashboard.directives.ModelField', [
           </div>';
         break;
       case 'multi-select':
-        console.log(scope.data[scope.key])
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10 multi-select">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
@@ -365,7 +363,6 @@ angular.module('dashboard.directives.ModelField', [
     },
     link: function(scope, element, attrs) {
 
-
       var property;
 
       function init() {
@@ -480,7 +477,6 @@ angular.module('dashboard.directives.ModelField', [
             }
             hasDataChanged = false
           }
-
         }
 
         if (property.display.type === 'radio' || property.display.type === 'select' || property.display.type === 'datetime' || property.display.type === 'boolean') {

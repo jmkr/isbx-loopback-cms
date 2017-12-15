@@ -159,7 +159,6 @@ angular.module('dashboard.directives.ModelFieldImage', [
               return;
             }
           }
-
           scope.data = null; //null out the data field
           if (scope.modelData.__ModelFieldImageData && scope.modelData.__ModelFieldImageData[scope.key]) {
             //make sure to remove any pending image uploads for this image field

@@ -72,7 +72,6 @@ angular.module('dashboard.directives.ModelFieldVideo', [
       };
 
       scope.clear = function() {
-        console.log('clear invoked')
         //Clear out an existing selected image
         scope.data = null; //null out the data field
         delete scope.videoUrl; //remove the preview video

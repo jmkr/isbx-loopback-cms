@@ -38,8 +38,6 @@ angular.module('dashboard.directives.ModelFieldFile', [
     },
     link: function(scope, element, attrs) {
 
-      console.log(scope)
-
       scope.selectFileButtonText = 'Select File';
       scope.clearButtonText = 'Clear';
       var translationBtnKeys = ['button.select_file'];

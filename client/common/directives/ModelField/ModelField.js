@@ -55,7 +55,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label> \
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-reference-edit key="key" property="property" options="display.options" model-data="data" ng-model="data[key]" class="field" ng-required="{{ model.properties[key].required || property.display.required }}" ng-disabled="display.readonly" ng-blur="ngBlur({key: key})" /> \
+            <model-field-reference-edit key="key" property="property" options="display.options" model-data="data" ng-model="data[key]" class="field" ng-required="{{ model.properties[key].required || property.display.required }}" ng-disabled="display.readonly" ng-blur="ngEditReason({key: key})" /> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
             <div class="model-field-edit-reason" ng-if="display.editReason">\
               <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
@@ -93,7 +93,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label> \
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-file-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngBlur({key: key})"/> \
+            <model-field-file-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngEditReason({key: key})"/> \
           </div> \
           <br /> \
           <label class="col-sm-2 control-label place-holder-file-label"></label> \
@@ -109,7 +109,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label> \
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-image-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngBlur({key: key})"/> \
+            <model-field-image-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngEditReason({key: key})"/> \
           </div>\
           <label class="col-sm-2 control-label"></label> \
           <div class="col-sm-10"> \
@@ -124,7 +124,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label> \
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-video-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngBlur({key: key})"/> \
+            <model-field-video-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngEditReason({key: key})"/> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
             <div class="model-field-edit-reason" ng-if="display.editReason">\
               <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
@@ -164,7 +164,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10 multi-select">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-multi-select key="key" property="property" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-blur="ngBlur({key: key})"/>\
+            <model-field-multi-select key="key" property="property" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-blur="ngEditReason({key: key})"/>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
             <div class="model-field-edit-reason" ng-if="display.editReason">\
               <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
@@ -252,7 +252,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <textarea msd-elastic ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}" ng-blur="onBlur({key: key})"></textarea>\
+            <textarea msd-elastic ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}" ng-blur="getEditReason({key: key})"></textarea>\
             <div class="model-field-description">\
               <span ng-if="display.description"> {{ display.description | translate }} </span> \
               <span ng-if="display.maxLength"> &nbsp({{ charsLeft }} characters left) </span>\
@@ -276,7 +276,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-canvas-edit key="key" property="property" options="display.options" ng-model="data[key]" class="field" ng-required="{{ model.properties[key].required }}" ng-disabled="display.readonly" ng-change="ngBlur({key: key})"></model-field-canvas-edit>\
+            <model-field-canvas-edit key="key" property="property" options="display.options" ng-model="data[key]" class="field" ng-required="{{ model.properties[key].required }}" ng-disabled="display.readonly" ng-change="ngEditReason({key: key})"></model-field-canvas-edit>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
             <div class="model-field-edit-reason" ng-if="display.editReason">\
               <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
@@ -304,7 +304,7 @@ angular.module('dashboard.directives.ModelField', [
         template = '<label class="col-sm-2 control-label">{{ display.label || key | translate }}:</label>\
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
-            <model-field-number key="key" property="property" options="display.options" ng-required="model.properties[key].required" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" ng-error="onFieldError(error)" class="field" ng-blur="ngBlur({key: key})"/>\
+            <model-field-number key="key" property="property" options="display.options" ng-required="model.properties[key].required" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" ng-error="onFieldError(error)" class="field" ng-edit-reason="ngEditReason({key: key})"/>\
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
             <div class="model-field-edit-reason" ng-if="display.editReason">\
               <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
@@ -326,7 +326,7 @@ angular.module('dashboard.directives.ModelField', [
           <div class="col-sm-10">\
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
             <div ng-class="{\'input-status-indicator\': display.showStatusIndicator}">\
-              <input type="text" ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-pattern="display.pattern" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}" ng-blur="onBlur({key: key})">\
+              <input type="text" ng-model="data[key]" ng-keyup="lengthCheck($event)" ng-pattern="display.pattern" ng-disabled="{{ display.readonly }}" ng-required="{{ model.properties[key].required }}" class="field form-control" ng-maxlength="{{ display.maxLength }}" ng-blur="getEditReason({key: key})">\
               <div class="field-status-indicator" ng-if="display.showStatusIndicator">\
                 <i class="fa" ng-class="{\'fa-check\': display.isValid && !display.isLoading, \'fa-warning\': !display.isValid && !display.isLoading, \'fa-spinner rotating\': display.isLoading}"></i>\
               </div>\
@@ -359,7 +359,7 @@ angular.module('dashboard.directives.ModelField', [
       model: '=model',
       data: '=ngModel',
       ngError: '&',
-      ngBlur: '&'
+      ngEditReason: '&'
     },
     link: function(scope, element, attrs) {
 
@@ -471,9 +471,9 @@ angular.module('dashboard.directives.ModelField', [
             }
           };
 
-          scope.onBlur = function(key) {
-            if (scope.ngBlur && hasDataChanged) {
-              scope.ngBlur(key)
+          scope.getEditReason = function(key) {
+            if (scope.ngEditReason && hasDataChanged) {
+              scope.ngEditReason(key)
             }
             hasDataChanged = false
           }
@@ -482,8 +482,8 @@ angular.module('dashboard.directives.ModelField', [
         if (property.display.type === 'radio' || property.display.type === 'select' || property.display.type === 'datetime' || property.display.type === 'boolean') {
           scope.onChange = function(key) {
             var hasDataChanged = true
-            if (scope.ngBlur && hasDataChanged) {
-              scope.ngBlur(key)
+            if (scope.ngEditReason && hasDataChanged) {
+              scope.ngEditReason(key)
             }
             hasDataChanged = false
           }

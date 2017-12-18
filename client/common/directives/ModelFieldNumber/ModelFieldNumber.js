@@ -21,7 +21,7 @@ angular.module('dashboard.directives.ModelFieldNumber', [])
       disabled: '=ngDisabled',
       required: '=ngRequired',
       ngError: '&',
-      ngBlur: '&',
+      ngEditReason: '&',
     },
     link: function(scope, element, attrs, ngModel) {
 
@@ -125,8 +125,8 @@ angular.module('dashboard.directives.ModelFieldNumber', [])
           if (scope.ngError) scope.ngError({error: null});
         }
 
-        if (scope.ngBlur && hasDataChanged) {
-          scope.ngBlur({key: scope.key})
+        if (scope.ngEditReason && hasDataChanged) {
+          scope.ngEditReason({key: scope.key})
         }
         hasDataChanged = false
       }

@@ -340,6 +340,9 @@ function cms(loopbackApplication, options) {
     var AccessToken = loopbackApplication.models.AccessToken;
     var tokenString = request.body.__accessToken || request.query.access_token;
     AccessToken.findById(tokenString, function(err, token) {
+      if (!token && request.query.isRegistrySurvey) {
+        return callback(null, true);
+      }
       if (err || !token) { return callback(err); }
       token.validate(function(err, isValid) {
         return callback(err, isValid, token);

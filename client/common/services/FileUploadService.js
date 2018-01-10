@@ -9,17 +9,18 @@ angular.module('dashboard.services.FileUpload', [
   "ngInject";
 
   var self = this;
-  
-  this.getS3Credentials = function(path, fileType) {
+
+  this.getS3Credentials = function(path, fileType, isRegistrySurvey) {
     var params = {
         access_token: $cookies.get('accessToken'),
         path: path,
         fileType: fileType,
-        r: new Date().getTime() //IE caches results so passing timestamp helps with cache prevention
+        r: new Date().getTime(), //IE caches results so passing timestamp helps with cache prevention
+        isRegistrySurvey: isRegistrySurvey
     };
     return Utils.apiHelper('GET', Config.serverParams.cmsBaseUrl + '/aws/s3/credentials', params);
   };
-  
+
   this.getFileUploadData = function(credentials) {
     return {
       key: credentials.uniqueFilePath, // the key to store the file on S3, could be file name or customized
@@ -33,8 +34,17 @@ angular.module('dashboard.services.FileUpload', [
       //filename:  credentials.uniqueFilePath // this is needed for Flash polyfill IE8-9
     };
   };
-  
+
   this.uploadFile = function(file, path) {
+
+    var isRegistrySurvey = false;
+
+    // parse the object into variables if registry survey is coming in
+    if (file.isRegistrySurvey) {
+      var isRegistrySurvey = true;
+      file = file.file;
+    }
+
     if (typeof file === 'string' || file instanceof String && file.indexOf('data:') == 0) {
       //Found data URI so convert to blob
       file = self.dataURItoBlob(file);
@@ -49,7 +59,7 @@ angular.module('dashboard.services.FileUpload', [
 
     //Get S3 credentials from Server
     var deferred = $q.defer();
-    self.getS3Credentials(path, fileType ? fileType : "").then(function(credentials) {
+    self.getS3Credentials(path, fileType ? fileType : "", isRegistrySurvey).then(function(credentials) {
       $upload.upload({
         url: credentials.uploadUrl, //S3 upload url including bucket name,
         method: 'POST',
@@ -206,15 +216,15 @@ angular.module('dashboard.services.FileUpload', [
         }
       }
     }
-    
+
     if (!file) {
       //No more files to upload
       deferred.resolve(imageUploadResults);
       return deferred.promise;
     }
-    
+
     //Get S3 credentials from Server
-    self.getS3Credentials(uploadFilePath, file.type).then(function(credentials) {
+    self.getS3Credentials(uploadFilePath, file.type, false).then(function(credentials) {
       $upload.upload({
         url: credentials.uploadUrl, //S3 upload url including bucket name,
         method: 'POST',

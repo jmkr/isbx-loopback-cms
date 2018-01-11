@@ -147,7 +147,8 @@ angular.module('dashboard.directives.ModelField', [
               ng-time-zone="display.options.timeZone" \
               ng-view-mode="display.options.viewMode" \
               ng-required="{{ model.properties[key].required }}" ng-disabled="{{ display.readonly }}"\
-              ng-blur="onChange({key: key})" \
+              on-change="onChange" \
+              key="key" \
               data-date-time-picker \
                /> \
               <span class="input-group-btn"> \

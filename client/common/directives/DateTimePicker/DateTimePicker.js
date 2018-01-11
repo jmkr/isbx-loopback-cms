@@ -8,17 +8,19 @@ angular.module('dashboard.directive.DateTimePicker', [
       require: '?ngModel',
       restrict: 'AE',
       scope: {
-          control: '=',
-          format: '@',
-          ngFormat: '=ngFormat',
-          ngTimeZone: '=ngTimeZone',
-          defaultDate: '@',
-          viewMode: '@',
-          ngViewMode: '=ngViewMode',
-          horizontal: '@',
-          locale: '@',
-          maxDate: '@',
-          minDate: '@'
+        control: '=',
+        format: '@',
+        ngFormat: '=ngFormat',
+        ngTimeZone: '=ngTimeZone',
+        defaultDate: '@',
+        viewMode: '@',
+        ngViewMode: '=ngViewMode',
+        horizontal: '@',
+        locale: '@',
+        maxDate: '@',
+        minDate: '@',
+        onChange: '=',
+        dataKey: '@',
       },
       link: function (scope, elem, attrs, ngModel) {
 
@@ -69,6 +71,9 @@ angular.module('dashboard.directive.DateTimePicker', [
           var dateValue = moment(elem.val(), scope.format);
           if (dateValue.isValid()) {
             ngModel.$setViewValue(dateValue);
+            if (scope.onChange) {
+              scope.onChange({key: scope.dataKey})
+            }
           } else {
             ngModel.$setViewValue(null);
           }

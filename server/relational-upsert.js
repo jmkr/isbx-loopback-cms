@@ -294,6 +294,11 @@ function upsertManyToMany(model, data, relationshipKey, relationshipData, relati
  * @param callback
  */
 function nextManyToMany(junctionModel, junctionModelIdKey, junctionRelationIdKey, relationIdKey, modelId, relationshipData, index, callback) {
+  if (!relationshipData) {
+    callback(null, 0)
+    return
+  }
+
   if (index >= relationshipData.length) {
     callback(null, relationshipData.length);
     return;

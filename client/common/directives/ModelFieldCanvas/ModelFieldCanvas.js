@@ -29,7 +29,7 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
   function getTemplate() {
     var template = '\
     <img ng-src="{{ data.fileUrl || data }}" crossOrigin="anonymous" class="disabled-div" ng-hide="!disabled"/></img>\
-    <canvas ng-hide="disabled" ng-signature-pad="signature" width="300" height="150"></canvas>\
+    <canvas ng-hide="disabled" ng-signature-pad="signature" width="300" height="150" ng-mouseup="changed()"></canvas>\
     <button ng-hide="disabled" class="btn btn-default" ng-click="clearCanvas()">Clear</button>\
   ';
     return template;
@@ -74,7 +74,7 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
             var context = scope.signature._canvas.getContext("2d");
             context.drawImage(image, 0, 0);
           };
-          if (typeof scope.data === 'object' && scope.data.fileUrl) {
+          if (scope.data && typeof scope.data === 'object' && scope.data.fileUrl) {
             image.src = scope.data.fileUrl;
           } else {
             image.src = scope.data;
@@ -85,6 +85,14 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
           scope.data = dataUrl;
         }
       });
+
+      scope.changed = function() {
+        if (scope.ngChange) {
+          setTimeout(function() {
+            scope.ngChange({key: scope.key})
+          }, 1)
+        }
+      }
 
       element.html(getTemplate()).show();
       $compile(element.contents())(scope);

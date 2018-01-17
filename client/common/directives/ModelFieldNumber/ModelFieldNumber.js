@@ -5,7 +5,7 @@ angular.module('dashboard.directives.ModelFieldNumber', [])
 
   function getTemplate() {
     var template =
-      '<input type="{{property.display.allowDecimal ? \'text\' : \'number\'}}" ng-class="{error: property.display.error.length > 0}" ng-keypress="checkNumber($event)" ng-blur="validateAndParseNumbers($event)" min="{{ property.display.minValue }}" max="{{ property.display.maxValue }}" ng-model="data" ng-disabled="disabled" ng-required="required" class="field form-control">';
+      '<input type="{{property.display.allowDecimal ? \'text\' : \'number\'}}" ng-class="{error: property.display.error.length > 0}" ng-keyup="checkNumber($event)" ng-blur="validateAndParseNumbers($event)" min="{{ property.display.minValue }}" max="{{ property.display.maxValue }}" ng-model="data" ng-disabled="disabled" ng-required="required" class="field form-control">';
     return template;
   }
 
@@ -86,6 +86,9 @@ angular.module('dashboard.directives.ModelFieldNumber', [])
             scope.ngError({error: new Error('This is a required field.')});
           } else if (scope.ngError) {
             scope.ngError({error: null});
+          }
+          if (scope.ngEditReason && hasDataChanged) {
+            scope.ngEditReason({key: scope.key})
           }
           return
         }

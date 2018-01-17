@@ -94,10 +94,6 @@ angular.module('dashboard.directives.ModelField', [
           <div class="col-sm-10"> \
             <div class="error-message" ng-if="display.error.length > 0">{{ display.error }}</div>\
             <model-field-file-edit key="key" options="display.options" ng-disabled="display.readonly" model-data="data" ng-model="data[key]" class="field" ng-change="ngEditReason({key: key})"/> \
-          </div> \
-          <br /> \
-          <label class="col-sm-2 control-label place-holder-file-label"></label> \
-          <div class="col-sm-10"> \
             <div class="model-field-description" ng-if="display.description">{{ display.description | translate }}</div>\
             <div class="model-field-edit-reason" ng-if="display.editReason">\
               <span> <b>Reason for Change</b>: {{ display.editReason.reason ===  \'Other\' ?  display.editReason.reasonText : display.editReason.reason }}</span>\
@@ -495,7 +491,7 @@ angular.module('dashboard.directives.ModelField', [
           var filename = scope.data[scope.key];
           if (typeof filename === 'object' && filename.filename) filename = filename.filename;
           else if (typeof filename === 'object' && filename.file) filename = filename.file.name;
-          if (filename) {
+          if (filename && typeof filename === 'text') {
             var extension = filename.toLowerCase().substring(filename.length-4);
             if (extension == '.png' || extension == '.jpg' || extension == 'jpeg' || extension == '.bmp') {
               property = angular.copy(property); //we don't want changes the schema property to persist outside of this directive

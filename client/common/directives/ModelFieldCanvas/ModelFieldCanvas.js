@@ -52,9 +52,20 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
       scope.isLoading = true;
       scope.signature = {};
 
+      scope.$on('revertDataSignature', function($event) {
+        $timeout(function() {
+          scope.isLoading = true;
+          var canvas = scope.signature._canvas;
+          var context = scope.signature._canvas.getContext("2d");
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          drawNewImage()
+        }, 1)
+      })
+
       scope.clearCanvas = function() {
         var canvas = scope.signature._canvas;
-        canvas.width = canvas.width;
+        var context = scope.signature._canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height)
         scope.data = null;
         if (scope.ngChange) {
           setTimeout(function() {
@@ -64,6 +75,10 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
       };
 
       scope.$watch('signature._mouseButtonDown', function() {
+        drawNewImage()
+      });
+
+      function drawNewImage() {
         if (scope.signature.fromDataURL && scope.isLoading) {
           //Load Existing Signature
           scope.isLoading = false;
@@ -84,7 +99,7 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
           var dataUrl = scope.signature.toDataURL();
           scope.data = dataUrl;
         }
-      });
+      }
 
       scope.changed = function() {
         if (scope.ngChange) {

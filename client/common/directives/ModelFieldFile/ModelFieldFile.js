@@ -133,7 +133,6 @@ angular.module('dashboard.directives.ModelFieldFile', [
         };
 
         scope.clear = function(e, isSkipConfirm, isSkipEditReason) {
-          console.log('clear')
           if (e && e.preventDefault) e.preventDefault();
           if (scope.options.confirm && !isSkipConfirm) {
             // Requires confirmation alert

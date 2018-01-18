@@ -152,7 +152,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
           console.log(error);
         };
 
-        scope.clear = function(isSkipConfirm) {
+        scope.clear = function(isSkipConfirm, isSkipEditReason) {
           if (scope.options.confirm && !isSkipConfirm) {
             // Requires confirmation alert
             if (!confirm('Are you sure you would like to remove this photo?')) {
@@ -167,7 +167,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
           delete scope.imageUrl; //remove the image
           delete scope.thumbnailUrl; //remove the image
           formController.$setDirty();
-          if (scope.ngChange) {
+          if (scope.ngChange && !isSkipEditReason) {
             setTimeout(function() {
               scope.ngChange({key: scope.key})
             }, 1)
@@ -176,7 +176,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
         
         scope.onFileSelect = function($files) {
           // clear the data on a new file select
-          if (scope.data) scope.clear(true);
+          if (scope.data !== undefined) scope.clear(true);
           //$files: an array of files selected, each file has name, size, and type.
           if ($files.length < 1) return;
           selectedFile = $files[0];
@@ -378,6 +378,10 @@ angular.module('dashboard.directives.ModelFieldImage', [
           $document.off("dragover");
           $(window).off("mouseleave");
         });
+
+        scope.$on("removeModelFieldImage", function() {
+          scope.clear(null, true);
+        })
 
 
     }

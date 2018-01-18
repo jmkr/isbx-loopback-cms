@@ -121,7 +121,7 @@ angular.module('dashboard.directives.ModelFieldFile', [
 
         scope.onFileSelect = function($files) {
           // clear the data on a new file select
-          if (scope.data) scope.clear({}, true);
+          if (scope.data !== undefined) scope.clear({}, true);
           //$files: an array of files selected, each file has name, size, and type.
           if ($files.length < 1) return;
           var selectedFile = $files[0];
@@ -132,7 +132,8 @@ angular.module('dashboard.directives.ModelFieldFile', [
 
         };
 
-        scope.clear = function(e, isSkipConfirm) {
+        scope.clear = function(e, isSkipConfirm, isSkipEditReason) {
+          console.log('clear')
           if (e && e.preventDefault) e.preventDefault();
           if (scope.options.confirm && !isSkipConfirm) {
             // Requires confirmation alert
@@ -143,7 +144,7 @@ angular.module('dashboard.directives.ModelFieldFile', [
           scope.data = null;
           scope.filename = null;
           scope.fileUrl = null;
-          if (scope.ngChange) {
+          if (scope.ngChange && !isSkipEditReason) {
             setTimeout(function() {
               scope.ngChange({key: scope.key})
             }, 1)
@@ -173,6 +174,10 @@ angular.module('dashboard.directives.ModelFieldFile', [
           $document.off("dragover");
           $(window).off("mouseleave");
         });
+
+        scope.$on('removeModelFieldFile', function(event, isSkipConfirm, isSkipEditReason) {
+          scope.clear(null, isSkipConfirm, isSkipEditReason)
+        })
 
     }
   };

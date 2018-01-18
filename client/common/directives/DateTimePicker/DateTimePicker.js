@@ -71,11 +71,11 @@ angular.module('dashboard.directive.DateTimePicker', [
           var dateValue = moment(elem.val(), scope.format);
           if (dateValue.isValid()) {
             ngModel.$setViewValue(dateValue);
-            if (scope.onChange) {
-              scope.onChange({key: scope.dataKey})
-            }
           } else {
             ngModel.$setViewValue(null);
+          }
+          if (scope.onChange) {
+            scope.onChange({key: scope.dataKey})
           }
         });
       }

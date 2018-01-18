@@ -52,7 +52,8 @@ angular.module('dashboard.directives.ModelFieldCanvas', [
       scope.isLoading = true;
       scope.signature = {};
 
-      scope.$on('revertDataSignature', function($event) {
+      scope.$on('revertDataSignature', function($event, key) {
+        if (key !== scope.key) return;
         $timeout(function() {
           scope.isLoading = true;
           var canvas = scope.signature._canvas;

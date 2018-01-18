@@ -379,7 +379,8 @@ angular.module('dashboard.directives.ModelFieldImage', [
           $(window).off("mouseleave");
         });
 
-        scope.$on("removeModelFieldImage", function() {
+        scope.$on("removeModelFieldImage", function(event, key) {
+          if (key !== scope.key) return;
           scope.clear(null, true);
         })
 

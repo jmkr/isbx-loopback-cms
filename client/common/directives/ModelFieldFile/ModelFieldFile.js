@@ -175,7 +175,8 @@ angular.module('dashboard.directives.ModelFieldFile', [
           $(window).off("mouseleave");
         });
 
-        scope.$on('removeModelFieldFile', function(event, isSkipConfirm, isSkipEditReason) {
+        scope.$on('removeModelFieldFile', function(event, key, isSkipConfirm, isSkipEditReason) {
+          if (key !== scope.key) return;
           scope.clear(null, isSkipConfirm, isSkipEditReason)
         })
 

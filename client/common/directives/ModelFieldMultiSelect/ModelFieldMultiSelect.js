@@ -43,11 +43,6 @@ angular.module('dashboard.directives.ModelFieldMultiSelect', [])
 
         element.html(getTemplate()).show();
         $compile(element.contents())(scope);
-
-        scope.$on('revertDataEventMatrix', function($event, oldData) {
-          scope.data = oldData;
-          initData();
-        })
       }
 
       /**

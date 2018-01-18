@@ -69,7 +69,6 @@ angular.module('dashboard.directive.DateTimePicker', [
           if (!scope.format) scope.format = scope.ngFormat;
           if (scope.locale) moment.locale(scope.locale);
           var dateValue = moment(elem.val(), scope.format);
-          console.log(dateValue)
           if (dateValue.isValid()) {
             ngModel.$setViewValue(dateValue);
           } else {

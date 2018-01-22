@@ -1,6 +1,6 @@
 angular.module('dashboard.directives.ModelFieldMultiSelect', [])
 
-.directive('modelFieldMultiSelect', function($compile) {
+.directive('modelFieldMultiSelect', function($compile, $timeout) {
   "ngInject";
 
   function getTemplate() {
@@ -43,6 +43,13 @@ angular.module('dashboard.directives.ModelFieldMultiSelect', [])
 
         element.html(getTemplate()).show();
         $compile(element.contents())(scope);
+
+        scope.$on('removeModelFieldMultiSelect', function($event, key) {
+          if (key !== scope.key) return;
+          $timeout(function() {
+            initData();
+          }, 1)
+        })
       }
 
       /**

@@ -1,6 +1,6 @@
 angular.module('dashboard.directives.ModelFieldMultiSelect', [])
 
-.directive('modelFieldMultiSelect', function($compile) {
+.directive('modelFieldMultiSelect', function($compile, $timeout) {
   "ngInject";
 
   function getTemplate() {
@@ -41,9 +41,15 @@ angular.module('dashboard.directives.ModelFieldMultiSelect', [])
         //Handle translating multi-select checks to scope.data output format
         scope.clickMultiSelectCheckbox = clickMultiSelectCheckbox;
 
-
         element.html(getTemplate()).show();
         $compile(element.contents())(scope);
+
+        scope.$on('removeModelFieldMultiSelect', function($event, key) {
+          if (key !== scope.key) return;
+          $timeout(function() {
+            initData();
+          }, 1)
+        })
       }
 
       /**
@@ -98,6 +104,10 @@ angular.module('dashboard.directives.ModelFieldMultiSelect', [])
        * Initial data load by checking desired output as comma, array, or object
        */
       function initData() {
+        // reset all to false - used to rebuild data if revert is required
+        for (var k in scope.selected) {
+          scope.selected[k] = false
+        };
         if (typeof property.display.output === 'undefined') {
           var options = scope.options || property.display.options;
           property.display.output = options instanceof Array ? "comma" : "object";

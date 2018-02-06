@@ -248,6 +248,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
         scope.imageClick = function() {
           //When user clicks the image container
           console.log('imageClick');
+          console.log(scope);
           if (scope.options && scope.options.isLightbox || scope.options.isLightboxWithZoom) {
             //Display Full Screen
             var image = new Image();

@@ -14,7 +14,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
       data: '=ngModel'
     },
     link: function(scope, element, attrs) {
-
+      console.log("HERE");
     }
   };
 })

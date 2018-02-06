@@ -25,7 +25,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
   return {
     restrict: 'E',
     require: '^form',
-    template: '<div class="image-container" ng-class="{ \'display-only\' : {{ displayOnly }}  }" style="background: no-repeat center center url(\'{{ thumbnailUrl }}\'); background-size: contain;" ng-click="imageClick()"></div> \
+    template: '<div class="image-container" ng-class="{ \'display-only\' : displayOnly }" style="background: no-repeat center center url(\'{{ thumbnailUrl }}\'); background-size: contain;" ng-click="imageClick()"></div> \
       <div class="button-menu show-menu">\
       <button class="btn btn-default upload-button" ng-hide="disabled">{{ selectFileButtonText }}</button> \
       <button class="btn btn-default clear-button" ng-show="imageUrl && !disabled" ng-click="clear()">{{ clearButtonText }}</button> \

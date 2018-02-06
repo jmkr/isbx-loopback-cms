@@ -65,6 +65,8 @@ angular.module('dashboard.directives.ModelFieldImage', [
         
         if (scope.options.displayOnly) {
           scope.displayOnly = true;
+          scope.imageUrl = scope.options.imageUrl;
+          scope.thumbnailUrl = scope.options.thumbnailUrl;
         }
 
         console.log(scope);

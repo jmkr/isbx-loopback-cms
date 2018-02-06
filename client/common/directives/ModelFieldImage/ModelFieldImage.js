@@ -14,7 +14,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
       data: '=ngModel'
     },
     link: function(scope, element, attrs) {
-      console.log("HERE");
+
     }
   };
 })
@@ -247,6 +247,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
         
         scope.imageClick = function() {
           //When user clicks the image container
+          console.log('imageClick');
           if (scope.options && scope.options.isLightbox || scope.options.isLightboxWithZoom) {
             //Display Full Screen
             var image = new Image();

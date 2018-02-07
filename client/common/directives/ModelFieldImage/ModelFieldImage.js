@@ -25,7 +25,7 @@ angular.module('dashboard.directives.ModelFieldImage', [
   return {
     restrict: 'E',
     require: '^form',
-    template: '<div class="image-container" ng-class="{ \'display-only\' : displayOnly }" style="background: no-repeat center center url(\'{{ thumbnailUrl }}\'); background-size: contain;" ng-click="!displayOnly && imageClick()"></div> \
+    template: '<div ng-class="isDisplayOnly ? \'display-only\' : \'image-container\'" style="background: no-repeat center center url(\'{{ thumbnailUrl }}\'); background-size: contain;" ng-click="!isDisplayOnly && imageClick()"></div> \
       <div class="button-menu show-menu">\
       <button class="btn btn-default upload-button" ng-hide="disabled">{{ selectFileButtonText }}</button> \
       <button class="btn btn-default clear-button" ng-show="imageUrl && !disabled" ng-click="clear()">{{ clearButtonText }}</button> \
@@ -63,9 +63,8 @@ angular.module('dashboard.directives.ModelFieldImage', [
         scope.uploadStatus = "Upload File";
 
         // For question type image-display
-        if (scope.options.displayOnly) {
-          scope.displayOnly = true;
-          scope.imageUrl = scope.options.imageUrl;
+        if (scope.options.isDisplayOnly) {
+          scope.isDisplayOnly = true;
           scope.thumbnailUrl = scope.options.imageUrl;
         }
 
